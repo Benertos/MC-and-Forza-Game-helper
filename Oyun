@@ -1,0 +1,84 @@
+import discord
+from discord.ext import commands
+from config import TOKEN
+
+# Botun mesajları okuyabilmesi için gerekli izinleri (intent) ayarlıyoruz
+intents = discord.Intents.default()
+intents.message_content = True  # Mesaj içeriğini okuma izni (Açık olmalı)
+
+# Botun ön ekini (prefix) '!' olarak belirliyoruz
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'Bot başarıyla giriş yaptı: {bot.user.name}')
+    # Botun durumunu (activity) ayarlıyoruz
+    await bot.change_presence(activity=discord.Game(name="Minecraft & Forza Horizon"))
+
+# 1. MINECRAFT KOMUTU (!minecraft)
+@bot.command(name='minecraft')
+async def minecraft(ctx, *, soru: str = None):
+    if soru is None:
+        await ctx.reply("⛏️ Lütfen bir Minecraft konusu belirtin! Örnek: `!minecraft elmas`")
+        return
+    
+    # Gelen soruya göre basit otomatik yanıtlar (Geliştirilebilir)
+    soru_lower = soru.lower()
+    if "elmas" in soru_lower or "diamond" in soru_lower:
+        cevap = "Minecraft 1.18 ve sonrası sürümlerde en iyi elmaslar **Y: -58** katmanında bulunur."
+    elif "netherite" in soru_lower:
+        cevap = "Netherite bulmak için Nether dünyasında **Y: 15** katmanında yatak patlatma yöntemini kullanabilirsiniz."
+    else:
+        cevap = f"'{soru}' konusunu kaydettim. Minecraft dünyasında hayatta kalmak için meşalelerinizi eksik etmeyin!"
+        
+    await ctx.reply(f"⛏️ **Minecraft Uzmanı:** {cevap}")
+
+# 2. FORZA HORIZON 4 KOMUTU (!forza4)
+@bot.command(name='forza4')
+async def forza4(ctx, *, soru: str = None):
+    if soru is None:
+        await ctx.reply("🇬🇧 Lütfen FH4 ile ilgili bir şey sorun! Örnek: `!forza4 drift`")
+        return
+
+    soru_lower = soru.lower()
+    if "drift" in soru_lower:
+        cevap = "Britanya sokaklarında yanlamak için **Formula Drift** paketindeki araçları veya arkadan itişli **Nissan Silvia** modellerini tercih edebilirsin."
+    elif "para" in soru_lower or "cr" in soru_lower:
+        cevap = "Müzayede evinde ucuza araç yakalayıp pahalıya satmak (Sniping) hâlâ en iyi para kazanma yollarından biridir."
+    else:
+        cevap = f"'{soru}' sorunu aldım. Britanya'da mevsim geçişlerine uygun lastik seçmeyi unutma!"
+
+    await ctx.reply(f"🇬🇧 **Forza Horizon 4 Uzmanı:** {cevap}")
+
+# 3. FORZA HORIZON 5 KOMUTU (!forza5)
+@bot.command(name='forza5')
+async def forza5(ctx, *, soru: str = None):
+    if soru is None:
+        await ctx.reply("🇲🇽 Lütfen FH5 ile ilgili bir şey sorun! Örnek: `!forza5 en hızlı araba`")
+        return
+
+    soru_lower = soru.lower()
+    if "hızlı" in soru_lower or "hız" in soru_lower:
+        cevap = "Meksika otobanlarında rüzgarı hissetmek için en hızlı araç **Koenigsegg Jesko**'dur (Uygun bir tune ayarı ile 490+ km/s hıza ulaşır)."
+    elif "para" in soru_lower or "cr" in soru_lower:
+        cevap = "EventLab üzerindeki özel topluluk haritalarını oynayarak veya beceri puanı kasıp Wheelspin (Çark) kazanarak hızlıca para biriktirebilirsin."
+    else:
+        cevap = f"'{soru}' sorunu kaydettim. Meksika haritasındaki saklı araç ahırlarını (Barn Finds) bulmayı ihmal etme!"
+
+    await ctx.reply(f"🇲🇽 **Forza Horizon 5 Uzmanı:** {cevap}")
+
+# 4. YARDIM KOMUTU (!yardım)
+@bot.command(name='yardım')
+async def yardim(ctx):
+    yardim_mesaji = (
+        "🎮 **Oyun Uzmanı Bot Komut Listesi** 🎮\n"
+        "Sadece `!` ile başlayan mesajlar komut olarak algılanır:\n\n"
+        "• `!minecraft [sorunuz]` - Minecraft hakkında bilgi verir.\n"
+        "• `!forza4 [sorunuz]` - Forza Horizon 4 taktikleri sunar.\n"
+        "• `!forza5 [sorunuz]` - Forza Horizon 5 önerileri verir.\n"
+        "• `!yardım` - Bu menüyü gösterir."
+    )
+    await ctx.reply(yardim_mesaji)
+
+# Botu çalıştıran ana fonksiyon (Tokenınızı buraya girin)
+bot.run(TOKEN)
