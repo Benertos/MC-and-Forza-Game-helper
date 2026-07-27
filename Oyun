@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from config import TOKEN
 
+#Look to up , I used a Config.py for use TOKEN
+
 # Botun mesajları okuyabilmesi için gerekli izinleri (intent) ayarlıyoruz
 intents = discord.Intents.default()
 intents.message_content = True  # Mesaj içeriğini okuma izni (Açık olmalı)
